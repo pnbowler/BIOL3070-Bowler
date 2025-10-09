@@ -10,8 +10,6 @@ Paige Bowler
   - [Hypothesis](#hypothesis)
   - [Prediction](#prediction)
 - [Methods](#methods)
-  - [Fill in 1st analysis
-    e.g. barplots](#fill-in-1st-analysis-eg-barplots)
   - [Fill in 2nd analysis/plot e.g. generalized linear
     model](#fill-in-2nd-analysisplot-eg-generalized-linear-model)
 - [DISCUSSION](#discussion)
@@ -25,6 +23,8 @@ Paige Bowler
 - [REFERENCES](#references)
 
 # ABSTRACT
+
+\[insert abstract here\]
 
 # BACKGROUND
 
@@ -91,7 +91,7 @@ report. In this section, describe what you did and why. Don’t just
 restate the code — explain the logic of each analysis in plain language.
 Keep each subsection short (2–4 sentences).
 
-## Fill in 1st analysis e.g. barplots
+\##Bloodmeals by Species \[Fill in 1st analysis e.g. barplots\]
 
 Fill in here… Explain that you compared the number of mosquito blood
 meals from each host species between sites with no WNV-positive pools
