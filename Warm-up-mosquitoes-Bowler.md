@@ -1,7 +1,7 @@
 Warm-up mini-Report: Mosquito Blood Hosts in Salt Lake City, Utah
 ================
 Paige Bowler
-2025-10-09
+2025-10-11
 
 - [ABSTRACT](#abstract)
 - [BACKGROUND](#background)
@@ -9,24 +9,46 @@ Paige Bowler
   - [Questions](#questions)
   - [Hypothesis](#hypothesis)
   - [Prediction](#prediction)
-- [Methods](#methods)
-  - [Fill in 2nd analysis/plot e.g. generalized linear
-    model](#fill-in-2nd-analysisplot-eg-generalized-linear-model)
+- [METHODS](#methods)
+  - [Analysis \#1 - Barplot of Bloodmeals by
+    Species](#analysis-1---barplot-of-bloodmeals-by-species)
+  - [Analysis \#2 - Generalized Linear
+    Model](#analysis-2---generalized-linear-model)
 - [DISCUSSION](#discussion)
-  - [Interpretation of 1st analysis
-    (e.g. barplots)](#interpretation-of-1st-analysis-eg-barplots)
-  - [Interpretation of 2nd analysis (e.g. generalized linear
-    model)](#interpretation-of-2nd-analysis-eg-generalized-linear-model)
-  - [Optional interpretation of 3rd analysis
-    (e.g. heatmaps)](#optional-interpretation-of-3rd-analysis-eg-heatmaps)
+  - [Interpretation of 1st analysis](#interpretation-of-1st-analysis)
+  - [Interpretation of 2nd analysis](#interpretation-of-2nd-analysis)
 - [CONCLUSION](#conclusion)
 - [REFERENCES](#references)
 
 # ABSTRACT
 
-\[insert abstract here\]
+    West Nile Virus (WNV) is commonly transmitted to humans and other
+mammals by mosquitoes, who pick it up when they feed on infected birds.
+Understanding which species of birds amplify WNV the most may be
+incredibly helpful in tracking and controlling the spread of the virus.
+This report investigates the relationship between house finch bloodmeals
+and the prevalence of WNV at multiple sites within Salt Lake City using
+multiple methods of analysis. Ultimately, it was determined that there
+is a positive relationship between the number of house finch bloodmeals
+and whether or not a site was WNV+.
 
 # BACKGROUND
+
+   Mosquitos pick up West Nile Virus (WNV) when they feed on infected
+birds, which they then transmit to humans and other mammals. Bloodfed
+mosquitos can be collected and DNA extracted. The resultant DNA extract
+contains both the mosquito and its meal’s DNA- the latter of which can
+be isolated and replicated through PCR by using vertebrate-specific
+primers, sequenced, and used to assemble a profile of potential hosts
+and amplifiers of WNV.  
+    The length of time that WMV viremia remains detectible (and thus
+transmissible) varies from species to species of bird (Komar et
+al. 2003). Birds that maintain viremia in their blood for longer may be
+responsible for more WNV+ mosquitos, and ultimately cause a greater
+number of mammal infections. House finches maintain detectible viremia
+for a notably lengthy duration. This, coupled with their prevalence in
+more densely populated areas, like Salt Lake, may make them a
+significant vector for the amplification of the spread of WNV.
 
 ``` r
 # Manually transcribe duration (mean, lo, hi) from the last table column
@@ -70,33 +92,35 @@ arrows(duration$lo, bp, duration$hi, bp,
 
 ## Questions
 
-Fill in here… state the main research question (e.g., Which bird species
-acts as an amplifying host of WNV in Salt Lake City?)
+What bird species significantly amplifies the spread of WNV in Salt Lake
+City?
 
 ## Hypothesis
 
-Fill in here… write your hypothesis clearly (e.g., House finches are
-acting as important amplifying hosts of WNV in Salt Lake City).
+House finches are key to spread of WNV.
 
 ## Prediction
 
-Fill in here… Turn the hypothesis into a testable prediction (e.g.,
-Locations with mosquito blood meals from house finches will also have
-higher numbers of WNV-positive mosquito pools).
+House finch bloodmeals will be positively correlated with the frequency
+of WNV+ mosquito pools.
 
-# Methods
+# METHODS
 
-Fill in here… Summarize the procedures and analyses you use in this
-report. In this section, describe what you did and why. Don’t just
-restate the code — explain the logic of each analysis in plain language.
-Keep each subsection short (2–4 sentences).
+   Bar plots were generated to display the number of bloodmeals per
+species for WNV+ and WNV- areas. This allows for the visualization of
+patterns and differences between WNV+/- locations.  
+   Additionally, two generalized linear models were run to investigate
+the relationship between house finch bloodmeals and both WMV+ pools and
+positivity rates. These models provide a more in-depth, quantitative
+breakdown of data than bar plots can provide, and can determine if the
+relationships the plots show are statistically significant.
 
-\##Bloodmeals by Species \[Fill in 1st analysis e.g. barplots\]
+## Analysis \#1 - Barplot of Bloodmeals by Species
 
-Fill in here… Explain that you compared the number of mosquito blood
-meals from each host species between sites with no WNV-positive pools
-and sites with one or more WNV-positive pools. Describe why a barplot
-helps visualize this comparison.
+   Number of bloodmeals taken per host species from locations where no
+WNV+ pools (-) and sites with 1+ WNV+ pools (+). These bar plots provide
+visual representation of the data, making differences in number of
+feedings per species between WNV+ and WNV- sites easier to see.
 
 ``` r
 ## import counts_matrix: data.frame with column 'loc_positives' (0/1) and host columns 'host_*'
@@ -157,7 +181,7 @@ xlim_use <- c(0, xmax * 1.08)
 
 ## 8) Plot: two horizontal barplots with identical order and colors
 op <- par(mfrow = c(1, 2),
-          mar = c(4, 12, 3, 2),  # big left margin for species names
+          mar = c(4, 12, 3,2.75),# big left margin for species names
           xaxs = "i")           # a bit tighter axis padding
 
 ## Panel A: No WNV detected (loc_positives = 0)
@@ -194,13 +218,14 @@ par(op)
 host_species_colors <- species_colors
 ```
 
-## Fill in 2nd analysis/plot e.g. generalized linear model
+## Analysis \#2 - Generalized Linear Model
 
-Fill in here… Explain that you tested whether the presence or number of
-house finch blood meals predicts whether a site had WNV-positive pools
-(binary) or a higher WNV positivity rate (numeric). Mention that this
-statistical test lets you formally evaluate the relationship suggested
-by the barplots.
+    This analysis uses two generalized linear models to determine the
+relationship between finch bloodmeals and the presence of WNV+ pools
+using binary data, and between finch bloodmeals and and WNV positivity
+rate using numeric data, as well as the statistical significance of
+both. The data from this analysis may support the patterns shown in
+analysis \#1.
 
 ``` r
 # second-analysis-or-plot, glm with house finch alone against binary +/_
@@ -259,35 +284,40 @@ summary(glm2)
 
 # DISCUSSION
 
-Fill in here… For each analysis, summarize what you found and interpret
-the results. Say whether they support or contradict your hypothesis.
+  The barplot in analysis \#1 indicates that the number of house finch
+blood meals is noticeably greater in WNV+ sites than WNV- sites.  
+   Analysis \#2 supports the results of analysis \#1, with a
+statistically significant positive correlation between the number of
+house finch bloodmeals and the WNV positivity of a site. It also shows
+that there is a very small, but very significant positive correlation
+between the number of house finch blood meals at a site and its degree
+of WNV positivity.
 
-## Interpretation of 1st analysis (e.g. barplots)
+## Interpretation of 1st analysis
 
-The first analysis… fill in here what it was, the summary of the
-results, and your interpretation.
+    Analysis \#1 looked at the number of bloodmeals per host species in
+WNV+ sites and WNV- sites. It showed that ~30 more house finch
+bloodmeals occured at positive sites than negative, though it cannot be
+determined that there is a significant difference between the two by bar
+plot alone.
 
-## Interpretation of 2nd analysis (e.g. generalized linear model)
+## Interpretation of 2nd analysis
 
-The second analysis… fill in here what it was, the summary of the
-results, and your interpretation.
-
-## Optional interpretation of 3rd analysis (e.g. heatmaps)
-
-The third analysis… fill in here what it was, the summary of the
-results, and your interpretation.
+   Analysis \#2 showed a positive correlation (0.3468) between number of
+house finch bloodmeals and whether or not a site was WNV positive or
+negative. This relationship is statistically significant (p = 0.0287),
+and supports the the pattern observed in analysis \#1. Analysis \#2 also
+showed a small, but positive positive correlation (0.027479.) between
+number of house finch bloodmeals and the degree of WNV positivity of a
+site. Though small, this relationship is incredibly significant (p =
+4.54e-05).
 
 # CONCLUSION
 
-Fill in here… State the overall answer to your research question, based
-on all analyses. Mention whether the evidence supports your hypothesis
-and what it suggests about WNV amplification in Salt Lake City.
+    Based on the analyses run, it can be determined that house finches
+are heavily responsible for the amplification of WNV in Salt Lake City.
 
 # REFERENCES
-
-Fill in here… List all sources you cited in your background and
-throughout the report. Use a consistent style.a conclusion you can draw
-from your analysis.
 
 1.  Komar N, Langevin S, Hinten S, Nemeth N, Edwards E, Hettler D, Davis
     B, Bowen R, Bunning M. Experimental infection of North American
@@ -295,4 +325,4 @@ from your analysis.
     Dis. 2003 Mar;9(3):311-22. <https://doi.org/10.3201/eid0903.020628>
 
 2.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
-    such as plot() and to correct syntax errors. Accessed 2025-10-09.
+    such as plot() and to correct syntax errors. Accessed 2025-10-11.
