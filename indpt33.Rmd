@@ -1,0 +1,141 @@
+---
+title: "indpt222"
+output: html_document
+date: "2025-11-13"
+---
+# BACKGROUND
+Cancer develops when genes that regulate cell replication are damaged, leading to unregulated proliferation
+of damaged cells (National Cancer Institute. 2021).Multiple genes must be mutated for a cell to become cancerous, but this analysis is focused on the gene that produces molecule CD24, C24.
+
+# STUDY QUESTIONS AND HYPOTHESIS
+
+## QUESTIONS
+Is there a relationship between level of expression of C24 and cancer?
+
+## HYPOTHESIS
+Level of expression of C24 will differ between cancerous and non-cancerous tissue.
+
+## PREDICTIONS
+C24  will be overexpressed in cancerous tissue. 
+
+# METHODS
+
+
+
+```{r figure 1, eval=TRUE}
+# Version info: R 4.2.2, Biobase 2.58.0, GEOquery 2.66.0, limma 3.54.0
+################################################################
+#   Data plots for selected GEO samples
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("GEOquery")
+library(GEOquery)
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("limma")
+library(limma)
+install.packages("umap")
+library(umap)
+
+# Version info: R 4.2.2, Biobase 2.58.0, GEOquery 2.66.0, limma 3.54.0
+################################################################
+#   Differential expression analysis with limma
+library(GEOquery)
+library(limma)
+library(umap)
+
+# load series and platform data from GEO
+
+gset <- getGEO("GSE15852", GSEMatrix =TRUE, AnnotGPL=TRUE)
+if (length(gset) > 1) idx <- grep("GPL96", attr(gset, "names")) else idx <- 1
+gset <- gset[[idx]]
+
+# make proper column names to match toptable 
+fvarLabels(gset) <- make.names(fvarLabels(gset))
+
+# group membership for all samples
+gsms <- paste0("01010101010101010101010101010101010101010101010101",
+               "010101010101010101010101010101010101")
+sml <- strsplit(gsms, split="")[[1]]
+
+# log2 transformation
+ex <- exprs(gset)
+qx <- as.numeric(quantile(ex, c(0., 0.25, 0.5, 0.75, 0.99, 1.0), na.rm=T))
+LogC <- (qx[5] > 100) ||
+  (qx[6]-qx[1] > 50 && qx[2] > 0)
+if (LogC) { ex[which(ex <= 0)] <- NaN
+exprs(gset) <- log2(ex) }
+
+# assign samples to groups and set up design matrix
+gs <- factor(sml)
+groups <- make.names(c("Normal Breast Tissue","Tumor Breast Tissue"))
+levels(gs) <- groups
+gset$group <- gs
+design <- model.matrix(~group + 0, gset)
+colnames(design) <- levels(gs)
+
+gset <- gset[complete.cases(exprs(gset)), ] # skip missing values
+
+fit <- lmFit(gset, design)  # fit linear model
+
+# set up contrasts of interest and recalculate model coefficients
+cts <- paste(groups[1], groups[2], sep="-")
+cont.matrix <- makeContrasts(contrasts=cts, levels=design)
+fit2 <- contrasts.fit(fit, cont.matrix)
+
+# compute statistics and table of top significant genes
+fit2 <- eBayes(fit2, 0.01)
+tT <- topTable(fit2, adjust="fdr", sort.by="B", number=250)
+
+tT <- subset(tT, select=c("ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbol","Gene.title","Gene.ID"))
+
+# Visualize and quality control test results.
+# Build histogram of P-values for all genes. Normal test
+# assumption is that most genes are not differentially expressed.
+tT2 <- topTable(fit2, adjust="fdr", sort.by="B", number=Inf)
+
+# summarize test results as "up", "down" or "not expressed"
+dT <- decideTests(fit2, adjust.method="fdr", p.value=0.05, lfc=0)
+
+# Volcano plot (log P-value vs log fold change)
+colnames(fit2) # list contrast names
+ct <- 1  # choose contrast of interest
+dT <- topTable(fit2, coef = ct, number = Inf, adjust.method = "BH")
+
+# Define thresholds
+logFC_cutoff <- 1
+adjP_cutoff <- 0.05
+
+# Assign colors based on thresholds
+dT$color <- "grey"  # default
+dT$color[dT$logFC >  logFC_cutoff & dT$adj.P.Val < adjP_cutoff] <- "red"    # upregulated
+dT$color[dT$logFC < -logFC_cutoff & dT$adj.P.Val < adjP_cutoff] <- "blue"   # downregulated
+
+# Clean up the contrast name (remove periods)
+contrast_name <- gsub("\\.", " ", colnames(fit2)[ct])
+contrast_name <- gsub("-", " and ", contrast_name)
+
+# Draw volcano plot
+with(dT, plot(logFC, -log10(adj.P.Val),
+              pch = 20,
+              col = color,
+              main = paste("GSE15852:", contrast_name),
+              xlab = "log2 Fold Change",
+              ylab = "-log10 Adjusted P-value"))
+
+# Add legend
+legend("bottomleft",
+       legend = c("Upregulated", "Downregulated", "Not significant"),
+       col = c("red", "blue", "grey"),
+       pch = 20,
+       bty = "n")
+```
+
+
+# WORKS CITED
+
+National Cancer Institute. (2021, October 11). What is cancer? In Understanding Cancer. U.S. Department of Health and Human Services. https://www.cancer.gov/about-cancer/understanding/what-is-cancer
+
+

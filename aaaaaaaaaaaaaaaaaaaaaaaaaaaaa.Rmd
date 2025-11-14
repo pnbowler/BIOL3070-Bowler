@@ -1,0 +1,40 @@
+---
+title: "Independent RMd"
+output: html_document
+date: "2025-10-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("remotes")
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r }
+summary(cars)
+```
+
+## Including Plots
+```{r libraries}
+# Libraries
+library(ggplot2)
+library(dplyr)
+
+```
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+data <- read.csv("BEAM_data.csv")
+#gene tp53 - underexpression(?)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+remotes::install_version("maptools", version = "1.1-8") # replace 1.2.3 with the desired version
+

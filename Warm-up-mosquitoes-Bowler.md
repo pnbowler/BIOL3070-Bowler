@@ -1,7 +1,7 @@
 Warm-up mini-Report: Mosquito Blood Hosts in Salt Lake City, Utah
 ================
 Paige Bowler
-2025-10-11
+2025-11-04
 
 - [ABSTRACT](#abstract)
 - [BACKGROUND](#background)
@@ -325,4 +325,4 @@ are heavily responsible for the amplification of WNV in Salt Lake City.
     Dis. 2003 Mar;9(3):311-22. <https://doi.org/10.3201/eid0903.020628>
 
 2.  ChatGPT. OpenAI, version Jan 2025. Used as a reference for functions
-    such as plot() and to correct syntax errors. Accessed 2025-10-11.
+    such as plot() and to correct syntax errors. Accessed 2025-11-04.
