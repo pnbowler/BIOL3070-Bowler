@@ -1,11 +1,17 @@
 ---
-title: "indpt222"
+title: "Differential Expression of CD24 in Cancerous and Non-Cancerous Breast Tissue"
+author: "Paige Bowler"
 output: html_document
 date: "2025-11-13"
 ---
+# ABSTRACT
+Cancer is the result of mutations in multiple genes crucial to cell cycle regulation. Though it is an incredibly common disease, it is still not fully understood, due to its multifaceted nature. This analysis utilizes a dataset of cancerous and non-cancerous breast tissue to investigate the role of CD24 expression in breast cancer incidence. Expression levels of CD24 in normal and cancerous tissue were analyzed in isolation, as well as alongside multiple other genes found to have significant expression variance between normal and cancerous breast tissue samples.  
+
 # BACKGROUND
 Cancer develops when genes that regulate cell replication are damaged, leading to unregulated proliferation
-of damaged cells (National Cancer Institute. 2021).Multiple genes must be mutated for a cell to become cancerous, but this analysis is focused on the gene that produces molecule CD24, C24.
+of rogue cells (National Cancer Institute. 2021). Though cancer rates have been decreasing since the 1990s, it still remains one of the most common causes of death globally (National Cancer Institute. 2025).
+Multiple genes must be mutated for a cell to become cancerous (National Cancer Institute. 2021), butt his analysis is focused on differential expression of the CD24 gene in breast cancer.
+
 
 # STUDY QUESTIONS AND HYPOTHESIS
 
@@ -19,10 +25,18 @@ Level of expression of C24 will differ between cancerous and non-cancerous tissu
 C24  will be overexpressed in cancerous tissue. 
 
 # METHODS
+This analysis pulls data from the #GSE15852 dataset on the Gene Expression Omnibus (GEO) database. The dataset consists of 86 breast tissue samples (43 cancerous, 43 normal) from women in Malaysia. Samples were sorted into "Control" or "Cancerous" groups. Paired t-tests were used to compare gene expression between groups (Pau Ni et al. 2010). P-values were adjusted to avoid false positives using the Bonferroni multiple test correction. Figure 1 was generated using the GEO2R software, and the code for figure 2 was generated with the GEO2R software and modified using ChatGPT.
 
+## Figure 1: CD24 expression levels
 
+```{r figure 1}
+knitr::include_graphics("CD24graph.png")
+```
 
-```{r figure 1, eval=TRUE}
+Expression level of CD24 in control (non-cancerous) vs cancerous tissue. CD24 was found to be heavily overexpressed in the samples of cancerous breast tissue (p = 1.05e-13).
+
+## Figure 2: Differential Regulation of Genes
+```{r figure 2, eval=TRUE}
 # Version info: R 4.2.2, Biobase 2.58.0, GEOquery 2.66.0, limma 3.54.0
 ################################################################
 #   Data plots for selected GEO samples
@@ -97,7 +111,7 @@ tT <- subset(tT, select=c("ID","adj.P.Val","P.Value","t","B","logFC","Gene.symbo
 tT2 <- topTable(fit2, adjust="fdr", sort.by="B", number=Inf)
 
 # summarize test results as "up", "down" or "not expressed"
-dT <- decideTests(fit2, adjust.method="fdr", p.value=0.05, lfc=0)
+dT <- decideTests(fit2, adjust.method="bonferroni", p.value=0.05, lfc=0)
 
 # Volcano plot (log P-value vs log fold change)
 colnames(fit2) # list contrast names
@@ -133,9 +147,17 @@ legend("bottomleft",
        bty = "n")
 ```
 
+Volcano plot of genes over- or underexpressed in cancerous breast tissue. Abnormal expression is significantly associated with cancerous breast tissue for multiple genes.
+
+# DISCUSSION
+As seen in figure 1, high levels of CD24 expression are significantly associated with breast cancer.There does appear to be a relationship between CD24 overexpression and breast cancer incidence, but 
+it is difficult to ascertain the exact relationship between the two. Cancer is a complex disease that requires multiple mutated genes to occur (National Cancer Institute. 2021), and as seen in figure 2, this data set is certainly not an exception. Overexpression of CD24 was also seen in non-cancerous breast tissue samples, also indicating that it is not the only determining factor in whether or not cancer develops.Further research will hopefully shed more light on CD24's role in breast cancer.
 
 # WORKS CITED
+ChatGPT. OpenAI, version Nov 2025. Used to modify color, legend, and title of the volcano plot. Accessed Nov 11, 2025.
 
 National Cancer Institute. (2021, October 11). What is cancer? In Understanding Cancer. U.S. Department of Health and Human Services. https://www.cancer.gov/about-cancer/understanding/what-is-cancer
 
+National Cancer Institute. (2025, May 7). Cancer Statistics In Understanding Cancer. U.S. Department of Health and Human Services. https://www.cancer.gov/about-cancer/understanding/statistics
 
+Pau Ni IB, Zakaria Z, Muhammad R, Abdullah N et al. Gene expression patterns distinguish breast carcinomas from normal bre ast tissues: the Malaysian context. Pathol Res Pract 2010 Apr 15;206(4):223-8. PMID: 20097481
