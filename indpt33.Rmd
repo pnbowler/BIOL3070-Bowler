@@ -29,7 +29,7 @@ C24  will be overexpressed in cancerous tissue.
 # METHODS
 This analysis pulls data from the #GSE15852 dataset on the Gene Expression Omnibus (GEO) database. The dataset consists of 86 breast tissue samples (43 cancerous, 43 normal) from women in Malaysia. Samples were sorted into "Control" or "Cancerous" groups. Paired t-tests were used to compare gene expression between groups (Pau Ni et al. 2010). P-values were adjusted to avoid false positives using the Bonferroni multiple test correction. Figure 1 was generated using the GEO2R software, and the code for figure 2 was generated with the GEO2R software and modified using ChatGPT.
 
-## Figure 1: CD24 expression levels
+## Figure 1: CD24 Expression Levels
 
 ```{r figure 1}
 knitr::include_graphics("CD24graph.png")
