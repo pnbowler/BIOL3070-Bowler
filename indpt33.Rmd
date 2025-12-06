@@ -1,8 +1,10 @@
 ---
 title: "Differential Expression of CD24 in Cancerous and Non-Cancerous Breast Tissue"
 author: "Paige Bowler"
-output: html_document
-date: "2025-11-13"
+date: "`r Sys.Date()`"
+output:
+  github_document:
+    toc: true
 ---
 # ABSTRACT
 Cancer is the result of mutations in multiple genes crucial to cell cycle regulation. Though it is an incredibly common disease, it is still not fully understood, due to its multifaceted nature. This analysis utilizes a dataset of cancerous and non-cancerous breast tissue to investigate the role of CD24 expression in breast cancer incidence. Expression levels of CD24 in normal and cancerous tissue were analyzed in isolation, as well as alongside multiple other genes found to have significant expression variance between normal and cancerous breast tissue samples.  
